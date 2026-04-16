@@ -12,16 +12,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
+    html { height: 100%; }
     body {
       margin: 0; font-family: 'Raleway', system-ui, sans-serif; color: #F5EDE0;
       min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 40px 24px; position: relative; overflow: hidden;
+      padding: 32px 24px; position: relative;
       background: #2A2318;
     }
     a { text-decoration: none; color: inherit; }
     ::selection { background: rgba(255,255,255,0.2); }
 
-    /* Grain overlay — leather texture feel */
+    /* Grain overlay */
     body::before {
       content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
       opacity: 0.4; mix-blend-mode: soft-light;
@@ -34,10 +35,8 @@
       background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 65%);
     }
 
-
-    /* Content */
     .page {
-      max-width: 560px; width: 100%; text-align: center; position: relative; z-index: 1;
+      max-width: 480px; width: 100%; text-align: center; position: relative; z-index: 1;
       animation: fadeSlideIn 0.8s ease-out both;
     }
 
@@ -47,50 +46,49 @@
     }
 
     .logo {
-      width: clamp(220px, 35vw, 300px); height: auto;
-      margin: 0 auto 32px; display: block;
-      opacity: 0; transition: opacity 0.6s ease;
+      width: clamp(140px, 22vw, 200px); height: auto;
+      margin: 0 auto 16px; display: block;
     }
-    .logo.loaded { opacity: 1; }
+
+    .founder {
+      font-size: 13px; color: rgba(245,237,224,0.35); margin: 0 0 4px; font-weight: 300; line-height: 1.6;
+    }
+    .founder strong { color: rgba(255,255,255,0.7); font-weight: 400; letter-spacing: 0.04em; }
+    .founder:last-of-type { margin-bottom: 20px; }
 
     h1 {
       font-family: 'Poiret One', serif;
-      font-size: clamp(44px, 10vw, 80px);
+      font-size: clamp(32px, 7vw, 56px);
       font-weight: 400; color: #FFFFFF;
-      margin: 0 0 28px; line-height: 0.95;
+      margin: 0 0 16px; line-height: 1;
       letter-spacing: 0.06em; text-transform: uppercase;
     }
 
     .tagline {
-      font-size: clamp(15px, 2.5vw, 18px); font-weight: 200;
-      color: rgba(245,237,224,0.5); line-height: 1.8;
-      margin: 0 0 36px; max-width: 420px; margin-left: auto; margin-right: auto;
+      font-size: clamp(13px, 2vw, 15px); font-weight: 200;
+      color: rgba(245,237,224,0.5); line-height: 1.7;
+      margin: 0 0 8px; max-width: 400px; margin-left: auto; margin-right: auto;
       letter-spacing: 0.02em;
     }
-
-    .line { width: 1px; height: 40px; background: rgba(255,255,255,0.12); margin: 0 auto 32px; }
-
-    .founder { font-size: 14px; color: rgba(245,237,224,0.35); margin: 0 0 48px; font-weight: 300; line-height: 1.7; }
-    .founder strong { color: rgba(255,255,255,0.7); font-weight: 400; letter-spacing: 0.04em; }
-    .founder .role { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; margin-top: 4px; color: rgba(255,255,255,0.25); }
+    .tagline:last-of-type { margin-bottom: 28px; }
 
     /* Form */
     .form-wrapper {
-      display: flex; gap: 0; max-width: 420px; margin: 0 auto;
+      display: flex; gap: 0; max-width: 380px; margin: 0 auto;
       border-radius: 4px; overflow: hidden;
     }
     .form-wrapper input {
-      flex: 1; min-width: 0; padding: 16px 20px;
+      flex: 1; min-width: 0; padding: 14px 18px;
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
       border-right: none; border-radius: 4px 0 0 4px;
-      color: #F5EDE0; font-size: 14px; font-weight: 300;
+      color: #F5EDE0; font-size: 13px; font-weight: 300;
       font-family: inherit; letter-spacing: 0.02em;
       outline: none; transition: border-color 0.3s;
     }
     .form-wrapper input::placeholder { color: rgba(245,237,224,0.25); }
     .form-wrapper input:focus { border-color: rgba(255,255,255,0.35); }
     .form-wrapper button {
-      padding: 16px 32px;
+      padding: 14px 28px;
       background: #F5EDE0; border: none; border-radius: 0 4px 4px 0;
       color: #2A2318; font-size: 11px; font-weight: 500;
       font-family: inherit; letter-spacing: 2.5px; text-transform: uppercase;
@@ -99,20 +97,13 @@
     .form-wrapper button:hover { background: #FFFFFF; transform: translateY(-1px); }
     .form-wrapper button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .note {
-      font-size: 12px; color: rgba(245,237,224,0.2);
-      margin-top: 24px; letter-spacing: 0.5px; font-weight: 200;
-    }
-
-    /* States */
     .form-message {
-      font-size: 14px; font-weight: 300; margin-top: 16px;
+      font-size: 13px; font-weight: 300; margin-top: 12px;
       letter-spacing: 0.02em; line-height: 1.6;
     }
     .form-message.success { color: rgba(255,255,255,0.8); }
     .form-message.error { color: rgba(255,150,150,0.7); }
 
-    /* Spinner */
     .spinner {
       display: inline-block; width: 14px; height: 14px;
       border: 2px solid rgba(42,35,24,0.2); border-top-color: #2A2318;
@@ -120,37 +111,37 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Footer */
     .footer {
-      position: fixed; bottom: 20px; z-index: 1;
-      font-size: 11px; color: rgba(245,237,224,0.35);
+      position: fixed; bottom: 16px; z-index: 1;
+      font-size: 10px; color: rgba(245,237,224,0.25);
       letter-spacing: 0.5px; font-weight: 300;
-      display: flex; gap: 20px; align-items: center;
+      display: flex; gap: 16px; align-items: center;
     }
-    .footer a { color: rgba(245,237,224,0.35); transition: color 0.2s; }
-    .footer a:hover { color: rgba(255,255,255,0.6); }
+    .footer a { color: rgba(245,237,224,0.25); transition: color 0.2s; }
+    .footer a:hover { color: rgba(255,255,255,0.5); }
 
     @media (max-width: 768px) {
-      .s1 { font-size: 120px; top: 3%; left: 0; }
-      .s2 { font-size: 70px; }
-      .s4 { font-size: 100px; bottom: 4%; }
-      .s5, .s6 { display: none; }
+      body { padding: 24px 20px; }
       .form-wrapper { flex-direction: column; }
       .form-wrapper input { border-right: 1px solid rgba(255,255,255,0.12); border-bottom: none; border-radius: 4px 4px 0 0; }
-      .form-wrapper button { border-radius: 0 0 4px 4px; padding: 18px 32px; }
+      .form-wrapper button { border-radius: 0 0 4px 4px; padding: 16px 28px; }
+      .footer { position: relative; bottom: auto; margin-top: 32px; }
+    }
+
+    @media (max-height: 700px) {
+      .logo { width: 120px; margin-bottom: 12px; }
+      h1 { font-size: 32px; margin-bottom: 12px; }
+      .founder:last-of-type { margin-bottom: 12px; }
+      .tagline:last-of-type { margin-bottom: 20px; }
     }
   </style>
 </head>
 <body>
 
   <div class="page">
-    <img id="community-logo" class="logo loaded" src="community-spirit-logo.png" alt="Community Spirit" />
-    <p class="founder">
-      From the Hosts of CreativeMornings Lisbon
-    </p>
-    <p class="founder">
-      <strong>Truth W. Hawk</strong> &amp; <strong>Laurine Maria Komduur</strong>
-    </p>
+    <img class="logo" src="community-spirit-logo.png" alt="Community Spirit" />
+    <p class="founder">From the Hosts of CreativeMornings Lisbon</p>
+    <p class="founder"><strong>Truth W. Hawk</strong> &amp; <strong>Laurine Maria Komduur</strong></p>
     <h1>Go Deeper.<br>Grow Better.<br>Together.</h1>
     <p class="tagline">Deepening engagement, exploration and connection with the concepts, content and community you&rsquo;ve come to know.</p>
     <p class="tagline">Enhanced events and experiences from the curators and hosts you&rsquo;ve grown to trust.</p>
@@ -175,7 +166,6 @@
 
     let formSchema = null;
 
-    // Fetch form schema on load to get the email field ID
     async function loadForm() {
       try {
         const res = await fetch(
@@ -198,13 +188,11 @@
 
       if (!email) return false;
 
-      // Disable while submitting
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>';
       msg.style.display = "none";
 
       try {
-        // Build answers — use the field ID from the schema, fallback to "email"
         const emailFieldId = formSchema?.fields?.[0]?.id || "email";
         const answers = { [emailFieldId]: email };
 
@@ -226,11 +214,10 @@
           throw new Error(data.error || "Something went wrong. Please try again.");
         }
 
-        // Success
         input.style.display = "none";
         btn.style.display = "none";
         msg.className = "form-message success";
-        msg.textContent = "You're in. Check your inbox for a confirmation email.";
+        msg.textContent = "You\u2019re on the list. We\u2019ll be in touch soon.";
         msg.style.display = "block";
       } catch (err) {
         btn.disabled = false;
@@ -243,7 +230,6 @@
       return false;
     }
 
-    // Load form schema on page load
     loadForm();
   </script>
 
