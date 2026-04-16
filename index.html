@@ -92,10 +92,12 @@
       border-right: none; border-radius: 4px 0 0 4px;
       color: #F5EDE0; font-size: 13px; font-weight: 300;
       font-family: inherit; letter-spacing: 0.02em;
-      outline: none; transition: border-color 0.3s;
+      outline: none; transition: border-color 0.3s, box-shadow 0.3s;
     }
     .form-wrapper input::placeholder { color: rgba(245,237,224,0.25); }
     .form-wrapper input:focus { border-color: rgba(255,255,255,0.35); }
+    .form-wrapper input.invalid { border-color: rgba(200,120,100,0.5); box-shadow: 0 0 0 2px rgba(200,120,100,0.1); }
+    .form-wrapper input.invalid::placeholder { color: rgba(200,120,100,0.4); }
     .form-wrapper button {
       padding: 14px 28px;
       background: #F5EDE0; border: none; border-radius: 0 4px 4px 0;
@@ -119,6 +121,7 @@
       border-radius: 50%; animation: spin 0.6s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
 
     /* Pillars section */
     .pillars {
@@ -222,8 +225,8 @@
     <p class="tagline">Deepening engagement, exploration and connection with the concepts, content and community you&rsquo;ve come to know.</p>
     <p class="tagline">Enhanced events and experiences from the curators and hosts you&rsquo;ve grown to trust.</p>
 
-    <form class="form-wrapper" id="join-form" onsubmit="return handleSubmit(event)">
-      <input type="email" id="email-input" placeholder="Your email address" required autocomplete="email" />
+    <form class="form-wrapper" id="join-form" onsubmit="return handleSubmit(event)" novalidate>
+      <input type="text" id="email-input" placeholder="Your email address" autocomplete="email" />
       <button type="submit" id="submit-btn">Join</button>
     </form>
     <div id="form-message" class="form-message" style="display:none"></div>
@@ -271,8 +274,8 @@
   <div class="bottom-cta">
     <div class="bottom-cta-line"></div>
     <p class="bottom-cta-text">Be the first to know about the <strong>Community Spirit</strong> launch event.</p>
-    <form class="form-wrapper" id="bottom-form" onsubmit="return handleBottomSubmit(event)">
-      <input type="email" id="bottom-email" placeholder="Your email address" required autocomplete="email" />
+    <form class="form-wrapper" id="bottom-form" onsubmit="return handleBottomSubmit(event)" novalidate>
+      <input type="text" id="bottom-email" placeholder="Your email address" autocomplete="email" />
       <button type="submit" id="bottom-btn">Join</button>
     </form>
     <div id="bottom-message" class="form-message" style="display:none"></div>
@@ -290,6 +293,23 @@
     const API_KEY = "ck_a55d224494bcdcb6e5fc4eb611156a4fe899368d4e2065d936c4881aea30c799";
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function shakeInvalid(input) {
+      const orig = input.placeholder;
+      input.value = "";
+      input.placeholder = "Please enter a valid email";
+      input.classList.add("invalid");
+      input.style.animation = "shake 0.4s ease";
+      input.focus();
+      setTimeout(() => {
+        input.style.animation = "";
+      }, 400);
+      input.addEventListener("input", function restore() {
+        input.classList.remove("invalid");
+        input.placeholder = orig;
+        input.removeEventListener("input", restore);
+      }, { once: true });
+    }
     let formSchema = null;
 
     async function loadForm() {
@@ -313,9 +333,7 @@
       const email = input.value.trim();
 
       if (!email || !EMAIL_RE.test(email)) {
-        msg.className = "form-message error";
-        msg.textContent = "Please enter a valid email address.";
-        msg.style.display = "block";
+        shakeInvalid(input);
         return false;
       }
 
@@ -357,9 +375,7 @@
       const msg = document.getElementById("bottom-message");
       const email = input.value.trim();
       if (!email || !EMAIL_RE.test(email)) {
-        msg.className = "form-message error";
-        msg.textContent = "Please enter a valid email address.";
-        msg.style.display = "block";
+        shakeInvalid(input);
         return false;
       }
       btn.disabled = true;
