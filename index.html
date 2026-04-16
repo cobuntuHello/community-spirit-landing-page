@@ -12,11 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    html { height: 100%; }
+    html { height: 100%; scroll-behavior: smooth; }
     body {
       margin: 0; font-family: 'Raleway', system-ui, sans-serif; color: #F5EDE0;
-      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 32px 24px; position: relative;
+      min-height: 100vh; position: relative;
       background: #2A2318;
     }
     a { text-decoration: none; color: inherit; }
@@ -35,8 +34,12 @@
       background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 65%);
     }
 
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 32px 24px; position: relative; z-index: 1;
+    }
     .page {
-      max-width: 480px; width: 100%; text-align: center; position: relative; z-index: 1;
+      max-width: 480px; width: 100%; text-align: center;
       animation: fadeSlideIn 0.8s ease-out both;
     }
 
@@ -111,8 +114,61 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Pillars section */
+    .pillars {
+      position: relative; z-index: 1;
+      padding: 80px 24px 60px; text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .pillars-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 3px; font-weight: 400;
+      color: rgba(245,237,224,0.3); margin: 0 0 12px;
+    }
+    .pillars-title {
+      font-family: 'Poiret One', serif; font-size: clamp(24px, 5vw, 36px);
+      font-weight: 400; color: #F5EDE0; margin: 0 0 48px; line-height: 1.2;
+    }
+    .pillars-title em { font-style: italic; color: rgba(200,170,120,0.7); }
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      max-width: 820px; margin: 0 auto;
+    }
+    .pillar-card {
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+      padding: 32px 24px; text-align: center;
+      background: rgba(255,255,255,0.02);
+    }
+    .pillar-line { width: 32px; height: 1px; background: rgba(200,170,120,0.4); margin: 0 auto 20px; }
+    .pillar-icon {
+      width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 8px;
+      border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;
+    }
+    .pillar-icon svg { width: 20px; height: 20px; stroke: rgba(200,170,120,0.6); fill: none; stroke-width: 1.5; }
+    .pillar-num { font-size: 11px; color: rgba(245,237,224,0.25); letter-spacing: 2px; margin: 0 0 12px; }
+    .pillar-heading {
+      font-family: 'Poiret One', serif; font-size: 16px; font-weight: 400;
+      color: #F5EDE0; margin: 0 0 12px; line-height: 1.4;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .pillar-text {
+      font-size: 13px; color: rgba(245,237,224,0.4); line-height: 1.7; font-weight: 200; margin: 0;
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      position: relative; z-index: 1;
+      padding: 40px 24px 60px; text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .bottom-cta-line { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 0 auto 24px; }
+    .bottom-cta-text {
+      font-size: 15px; color: rgba(245,237,224,0.45); font-weight: 200; font-style: italic;
+      margin: 0 0 24px; letter-spacing: 0.02em;
+    }
+    .bottom-cta-text strong { color: rgba(200,170,120,0.7); font-weight: 300; }
+
     .footer {
-      position: fixed; bottom: 16px; z-index: 1;
+      position: relative; padding: 20px 0; z-index: 1; text-align: center;
       font-size: 10px; color: rgba(245,237,224,0.25);
       letter-spacing: 0.5px; font-weight: 300;
       display: flex; gap: 16px; align-items: center;
@@ -121,11 +177,11 @@
     .footer a:hover { color: rgba(255,255,255,0.5); }
 
     @media (max-width: 768px) {
-      body { padding: 24px 20px; }
       .form-wrapper { flex-direction: column; }
       .form-wrapper input { border-right: 1px solid rgba(255,255,255,0.12); border-bottom: none; border-radius: 4px 4px 0 0; }
       .form-wrapper button { border-radius: 0 0 4px 4px; padding: 16px 28px; }
-      .footer { position: relative; bottom: auto; margin-top: 32px; }
+      .pillars-grid { grid-template-columns: 1fr; max-width: 360px; }
+      .pillars { padding: 48px 20px 40px; }
     }
 
     @media (max-height: 700px) {
@@ -138,6 +194,7 @@
 </head>
 <body>
 
+  <div class="hero">
   <div class="page">
     <img class="logo" src="community-spirit-logo.png" alt="Community Spirit" />
     <p class="founder">From the Hosts of CreativeMornings Lisbon</p>
@@ -151,6 +208,53 @@
       <button type="submit" id="submit-btn">Join</button>
     </form>
     <div id="form-message" class="form-message" style="display:none"></div>
+  </div>
+  </div>
+
+  <!-- Three Branches -->
+  <div class="pillars">
+    <p class="pillars-label">What We&rsquo;re Growing</p>
+    <h2 class="pillars-title">Three branches. <em>One spirit.</em></h2>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-line"></div>
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8M5 12l7-8 7 8M9 16l3-4 3 4"/></svg>
+        </div>
+        <p class="pillar-num">01</p>
+        <h3 class="pillar-heading">Personal Growth,<br>Self-Development<br>&amp; Leadership</h3>
+        <p class="pillar-text">Expand into your fullest potential through workshops, masterclasses, and immersive experiences designed to awaken and inspire the leader within.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-line"></div>
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <p class="pillar-num">02</p>
+        <h3 class="pillar-heading">Heal, Nurture<br>&amp; Thrive</h3>
+        <p class="pillar-text">Create capacity for rest, renewal, and resilience through tools, principles and practices that nourish mind, body, and spirit so you can truly thrive.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-line"></div>
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <p class="pillar-num">03</p>
+        <h3 class="pillar-heading">Abundance,<br>Interconnection<br>&amp; Community</h3>
+        <p class="pillar-text">Celebrate the rich fabric of human connection and experience the abundant generosity and gratitude that flows to all when a diverse community gathers together around shared passions and purpose.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <div class="bottom-cta-line"></div>
+    <p class="bottom-cta-text">Be the first to know about the <strong>Community Spirit</strong> launch event.</p>
+    <form class="form-wrapper" id="bottom-form" onsubmit="return handleBottomSubmit(event)">
+      <input type="email" id="bottom-email" placeholder="Your email address" required autocomplete="email" />
+      <button type="submit" id="bottom-btn">Join</button>
+    </form>
+    <div id="bottom-message" class="form-message" style="display:none"></div>
   </div>
 
   <div class="footer">
@@ -227,6 +331,40 @@
         msg.style.display = "block";
       }
 
+      return false;
+    }
+
+    async function handleBottomSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("bottom-email");
+      const btn = document.getElementById("bottom-btn");
+      const msg = document.getElementById("bottom-message");
+      const email = input.value.trim();
+      if (!email) return false;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+      msg.style.display = "none";
+      try {
+        const emailFieldId = formSchema?.fields?.[0]?.id || "email";
+        const res = await fetch(
+          `${API_URL}/api/communities/${COMMUNITY_TAG}/segments/${SEGMENT_ID}/submit`,
+          { method: "POST", headers: { "Content-Type": "application/json", "X-API-Key": API_KEY },
+            body: JSON.stringify({ answers: { [emailFieldId]: email }, source: "landing_page" }) }
+        );
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || "Something went wrong.");
+        input.style.display = "none";
+        btn.style.display = "none";
+        msg.className = "form-message success";
+        msg.textContent = "You\u2019re on the list. We\u2019ll be in touch soon.";
+        msg.style.display = "block";
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Join";
+        msg.className = "form-message error";
+        msg.textContent = err.message;
+        msg.style.display = "block";
+      }
       return false;
     }
 
