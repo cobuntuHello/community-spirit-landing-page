@@ -62,7 +62,7 @@
       font-family: 'Cinzel', Georgia, serif;
       font-size: clamp(32px, 7vw, 52px);
       font-weight: 400; color: #FFFFFF;
-      margin: 56px 0 28px; line-height: 1.15;
+      margin: 40px 0 40px; line-height: 1.15;
       letter-spacing: 0.04em;
     }
 
@@ -197,9 +197,9 @@
     .footer a:hover { color: rgba(255,255,255,0.5); }
 
     @media (max-width: 768px) {
-      .form-wrapper { flex-direction: column; }
-      .form-wrapper input { border-right: 1px solid rgba(255,255,255,0.12); border-bottom: none; border-radius: 4px 4px 0 0; }
-      .form-wrapper button { border-radius: 0 0 4px 4px; padding: 16px 28px; }
+      .form-wrapper { flex-direction: column; gap: 8px; }
+      .form-wrapper input { border-right: 1px solid rgba(255,255,255,0.12); border-radius: 4px; }
+      .form-wrapper button { border-radius: 4px; padding: 16px 28px; }
       .pillars-grid { grid-template-columns: 1fr; max-width: 360px; }
       .pillars { padding: 48px 20px 40px; }
     }
@@ -289,6 +289,7 @@
     const SEGMENT_ID = "seg-default-0b4b32b6-fcc5-4c86-9bfa-76871ffe9918";
     const API_KEY = "ck_a55d224494bcdcb6e5fc4eb611156a4fe899368d4e2065d936c4881aea30c799";
 
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let formSchema = null;
 
     async function loadForm() {
@@ -311,7 +312,12 @@
       const msg = document.getElementById("form-message");
       const email = input.value.trim();
 
-      if (!email) return false;
+      if (!email || !EMAIL_RE.test(email)) {
+        msg.className = "form-message error";
+        msg.textContent = "Please enter a valid email address.";
+        msg.style.display = "block";
+        return false;
+      }
 
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>';
@@ -319,26 +325,16 @@
 
       try {
         const emailFieldId = formSchema?.fields?.[0]?.id || "email";
-        const answers = { [emailFieldId]: email };
-
         const res = await fetch(
           `${API_URL}/api/communities/${COMMUNITY_TAG}/segments/${SEGMENT_ID}/submit`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-API-Key": API_KEY,
-            },
-            body: JSON.stringify({ answers, source: "landing_page" }),
+            headers: { "Content-Type": "application/json", "X-API-Key": API_KEY },
+            body: JSON.stringify({ answers: { [emailFieldId]: email }, source: "landing_page" }),
           }
         );
-
         const data = await res.json().catch(() => ({}));
-
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong. Please try again.");
-        }
-
+        if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again.");
         input.style.display = "none";
         btn.style.display = "none";
         msg.className = "form-message success";
@@ -351,7 +347,6 @@
         msg.textContent = err.message;
         msg.style.display = "block";
       }
-
       return false;
     }
 
@@ -361,7 +356,12 @@
       const btn = document.getElementById("bottom-btn");
       const msg = document.getElementById("bottom-message");
       const email = input.value.trim();
-      if (!email) return false;
+      if (!email || !EMAIL_RE.test(email)) {
+        msg.className = "form-message error";
+        msg.textContent = "Please enter a valid email address.";
+        msg.style.display = "block";
+        return false;
+      }
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>';
       msg.style.display = "none";
